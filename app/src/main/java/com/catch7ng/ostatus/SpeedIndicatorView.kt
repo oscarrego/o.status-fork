@@ -38,7 +38,6 @@ class SpeedIndicatorView(
     private var prevDown = -1f
 
     // ── Paint ─────────────────────────────────────────────────────────────────
-    private val bgPaint  = Paint(Paint.ANTI_ALIAS_FLAG)
     private val txtPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         textAlign = Paint.Align.CENTER
@@ -91,22 +90,7 @@ class SpeedIndicatorView(
         val active = resolveActiveColor()
         val thick = thicknessPct.coerceIn(50, 200) / 100f
 
-        // Minimal pill: very subtle semi-transparent background
-        val bgAlpha = 140  // ~55% opacity — minimal, like the reference image
-        bgPaint.color = if (isDark()) Color.argb(bgAlpha, 10, 10, 16)
-                        else Color.argb(bgAlpha, 230, 230, 240)
-        bgPaint.style = Paint.Style.FILL
-        val r = h / 2f
-        canvas.drawRoundRect(0f, 0f, w, h, r, r, bgPaint)
-
-        // Hairline glass border (very subtle)
-        bgPaint.color = Color.argb(30, 255, 255, 255)
-        bgPaint.style = Paint.Style.STROKE
-        bgPaint.strokeWidth = 0.8f * dens
-        canvas.drawRoundRect(0.5f, 0.5f, w - 0.5f, h - 0.5f, r, r, bgPaint)
-        bgPaint.style = Paint.Style.FILL
-
-        // Speed text centered — base 13sp scaled by thickness
+        // Pure text — no background, no border, no box
         val textSp = 13f * thick
         txtPaint.textSize = textSp * dens
         txtPaint.color = active
